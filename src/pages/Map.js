@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import GoogleMapReact from 'google-map-react'
 import useSupercluster from 'use-supercluster';
 
-
-
 const Marker = ({ children }) => children;
 
 const Map = () => {
@@ -20,15 +18,13 @@ const Map = () => {
 
     }, [])
 
-
-
-    // console.log(locations);
+    console.log(locations);
 
     const points = locations.map(location => ({
         type: "Feature",
         properties: {
             cluster: false,
-            locationId: locations.id,
+            locationId: location.id,
 
         },
         geometry: {
@@ -38,14 +34,14 @@ const Map = () => {
         }
     }));
 
-    const { clusters } = useSupercluster({
+    const { clusters, supercluster } = useSupercluster({
         points,
         bounds,
         zoom,
         options: { radius: 75, maxZoom: 20 }
     })
 
-    console.log(clusters);
+    // console.log(clusters);
 
     // console.log(locations);
 
@@ -54,7 +50,7 @@ const Map = () => {
         <div style={{ height: '600px', width: '800px' }
         }>
             <GoogleMapReact
-                bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API }}
+                bootstrapURLKeys={{ key: 'AIzaSyBssF2HcQWKoxPkEy5KYEyH3jwX-k3ZYgA' }}
                 defaultCenter={{ lat: 51.4904, lng: -0.27603 }}
                 defaultZoom={10}
                 yesIWantToUseGoogleMapApiInternals
@@ -81,19 +77,29 @@ const Map = () => {
 
                     if (isCluster) {
                         return (
-                            <Marker key={locations.id} lat={latitude} lng={longitude}>
-                                <button className='pointer'>
-
-                                    <img src='/map-pin.png' alt='pointer img' text={pointCount} />
-                                </button>
+                            <Marker key={cluster.locationId} lat={latitude} lng={longitude}>
+                                <div className='cluster-point' style={{
+                                    width: `${10 + (pointCount / points.length) * 20}px`,
+                                    height: `${10 + (pointCount / points.length) * 20}px`
+                                }}
+                                    onClick={() => {
+                                        const zoomingView = Math.min(
+                                            supercluster.getClusterExpansionZoom(cluster.id),
+                                            50
+                                        );
+                                        mapRef.current.setZoom(zoomingView);
+                                        mapRef.current.panTo({ lat: latitude, lng: longitude })
+                                    }}
+                                >
+                                    {pointCount}
+                                </div>
 
                             </Marker>
                         )
                     }
 
-
                     return (
-                        < Marker key={locations.id} lat={latitude} lng={longitude}
+                        < Marker key={cluster.locationId} lat={latitude} lng={longitude}
                         >
                             <button className='pointer'>
                                 <img src='/map-pin.png' alt='pointer img' />
