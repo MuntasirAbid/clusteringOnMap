@@ -6,7 +6,7 @@ const Marker = ({ children }) => children;
 
 const Map = () => {
     const mapRef = useRef();
-    const [zoom, setZoom] = useState(10);
+    const [zoom, setZoom] = useState(7);
     const [locations, setLocations] = useState([]);
     const [bounds, setBounds] = useState(null);
 
@@ -18,13 +18,14 @@ const Map = () => {
 
     }, [])
 
-    console.log(locations);
+    // console.log(locations[0].properties.id);
 
     const points = locations.map(location => ({
         type: "Feature",
+
         properties: {
             cluster: false,
-            locationId: location.id,
+            locationId: location.properties.id,
 
         },
         geometry: {
@@ -33,6 +34,7 @@ const Map = () => {
             ]
         }
     }));
+    // console.log(points);
 
     const { clusters, supercluster } = useSupercluster({
         points,
@@ -41,7 +43,7 @@ const Map = () => {
         options: { radius: 75, maxZoom: 20 }
     })
 
-    // console.log(clusters);
+    console.log(clusters);
 
     // console.log(locations);
 
@@ -52,7 +54,7 @@ const Map = () => {
             <GoogleMapReact
                 bootstrapURLKeys={{ key: 'AIzaSyBssF2HcQWKoxPkEy5KYEyH3jwX-k3ZYgA' }}
                 defaultCenter={{ lat: 51.4904, lng: -0.27603 }}
-                defaultZoom={10}
+                defaultZoom={7}
                 yesIWantToUseGoogleMapApiInternals
                 onGoogleApiLoaded={({ map }) => {
                     mapRef.current = map;
@@ -77,7 +79,7 @@ const Map = () => {
 
                     if (isCluster) {
                         return (
-                            <Marker key={cluster.locationId} lat={latitude} lng={longitude}>
+                            <Marker key={cluster.properties.locationId || cluster.id} lat={latitude} lng={longitude}>
                                 <div className='cluster-point' style={{
                                     width: `${10 + (pointCount / points.length) * 20}px`,
                                     height: `${10 + (pointCount / points.length) * 20}px`
@@ -85,7 +87,7 @@ const Map = () => {
                                     onClick={() => {
                                         const zoomingView = Math.min(
                                             supercluster.getClusterExpansionZoom(cluster.id),
-                                            50
+                                            20
                                         );
                                         mapRef.current.setZoom(zoomingView);
                                         mapRef.current.panTo({ lat: latitude, lng: longitude })
@@ -99,7 +101,7 @@ const Map = () => {
                     }
 
                     return (
-                        < Marker key={cluster.locationId} lat={latitude} lng={longitude}
+                        < Marker key={cluster.properties.locationId || cluster.id} lat={latitude} lng={longitude}
                         >
                             <button className='pointer'>
                                 <img src='/map-pin.png' alt='pointer img' />
@@ -122,39 +124,7 @@ const Map = () => {
 
             </GoogleMapReact>
         </div >
-        // <LoadScript
-        //     googleMapsApiKey="AIzaSyBssF2HcQWKoxPkEy5KYEyH3jwX-k3ZYgA"
-        // >
-        //     <GoogleMap
-        //         mapContainerStyle={containerStyle}
-        //         center={center}
-        //         zoom={10}
 
-        //         onZoomChanged={({ zoom, bounds }) => {
-        //             setZoom(zoom);
-        //             setBounds([
-        //                 bounds.nw.lng,
-        //                 bounds.se.lat,
-        //                 bounds.se.lng,
-        //                 bounds.nw.lat
-        //             ])
-        //         }}
-
-        //     >
-        //         {locations.length && locations?.map(location => (
-
-        //             // console.log(location.geometry.coordinates[0], location.geometry.coordinates[1])
-        //             < Marker key={location.id} lat={parseFloat(location.geometry.coordinates[0])} lng={parseFloat(location.geometry.coordinates[1])}
-        //             >
-        //                 <button className='pointer'>
-        //                     {console.log('point')}
-        //                     point
-        //                     {/* <img src='/public/pointer.webp' alt='pointer img' /> */}
-        //                 </button>
-        //             </Marker>
-        //         ))}
-        //     </GoogleMap>
-        // </LoadScript >
     )
 }
 
