@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import GoogleMapReact from 'google-map-react'
 import useSupercluster from 'use-supercluster';
 
+
 const Marker = ({ children }) => children;
 
 const Map = () => {
@@ -10,6 +11,7 @@ const Map = () => {
     const [zoom, setZoom] = useState(7);
     const [locations, setLocations] = useState([]);
     const [bounds, setBounds] = useState(null);
+
 
     useEffect(() => {
         fetch('example data-set.json')
@@ -104,12 +106,13 @@ const Map = () => {
                             }}>
                                 <img src='/map-pin.png' alt='pointer img' />
                             </button>
-                            {showTooltip === cluster.properties.locationId && <div className='tooltip_bg'>Id:{cluster.properties.locationId}</div>}
+                            {showTooltip === cluster.properties.locationId && <div className='tooltip_bg'>Id: {cluster.properties.locationId}</div>}
 
                         </Marker>
                     )
 
                 })}
+
             </GoogleMapReact>
         </div >
 
