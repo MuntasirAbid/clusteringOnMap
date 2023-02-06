@@ -6,6 +6,7 @@ const Marker = ({ children }) => children;
 
 const Map = () => {
     const mapRef = useRef();
+    const [showTooltip, setShowTooltip] = useState(undefined);
     const [zoom, setZoom] = useState(7);
     const [locations, setLocations] = useState([]);
     const [bounds, setBounds] = useState(null);
@@ -17,8 +18,6 @@ const Map = () => {
             .catch(error => console.log(error))
 
     }, [])
-
-    // console.log(locations[0].properties.id);
 
     const points = locations.map(location => ({
         type: "Feature",
@@ -34,7 +33,7 @@ const Map = () => {
             ]
         }
     }));
-    // console.log(points);
+
 
     const { clusters, supercluster } = useSupercluster({
         points,
@@ -42,10 +41,6 @@ const Map = () => {
         zoom,
         options: { radius: 75, maxZoom: 20 }
     })
-
-    console.log(clusters);
-
-    // console.log(locations);
 
     return (
 
@@ -101,27 +96,20 @@ const Map = () => {
                     }
 
                     return (
-                        < Marker key={cluster.properties.locationId || cluster.id} lat={latitude} lng={longitude}
+                        <Marker key={cluster.properties.locationId || cluster.id} lat={latitude} lng={longitude}
                         >
-                            <button className='pointer'>
+                            <button className='pointer' onClick={() => {
+
+                                setShowTooltip(cluster.properties.locationId);
+                            }}>
                                 <img src='/map-pin.png' alt='pointer img' />
                             </button>
+                            {showTooltip === cluster.properties.locationId && <div className='tooltip_bg'>Id:{cluster.properties.locationId}</div>}
+
                         </Marker>
                     )
 
                 })}
-
-                {/* {locations.length && locations?.map(location => (
-
-                    // console.log(location.geometry.coordinates[0], location.geometry.coordinates[1])
-                    < Marker key={locations.id} lat={location.geometry.coordinates[1]} lng={location.geometry.coordinates[0]}
-                    >
-                        <button className='pointer'>
-                            <img src='/map-pin.png' alt='pointer img' />
-                        </button>
-                    </Marker>
-                ))} */}
-
             </GoogleMapReact>
         </div >
 
