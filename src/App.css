@@ -10,15 +10,18 @@
 .pointer {
   background: none;
   border: none;
+
 }
 
 .pointer img {
   width: 40px;
   height: 40px;
+  cursor: pointer;
 }
 
 .tooltip_bg {
   background-color: white;
+  border-radius: 2px;
   padding: 10px 14px;
   min-width: 80px;
   text-align: center;

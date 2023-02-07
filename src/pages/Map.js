@@ -52,6 +52,7 @@ const Map = () => {
                 bootstrapURLKeys={{ key: 'AIzaSyBssF2HcQWKoxPkEy5KYEyH3jwX-k3ZYgA' }}
                 defaultCenter={{ lat: 51.4904, lng: -0.27603 }}
                 defaultZoom={7}
+
                 yesIWantToUseGoogleMapApiInternals
                 onGoogleApiLoaded={({ map }) => {
                     mapRef.current = map;
@@ -68,6 +69,7 @@ const Map = () => {
 
             >
                 {clusters.map(cluster => {
+
                     const [longitude, latitude] = cluster.geometry.coordinates;
                     const {
                         cluster: isCluster,
@@ -99,6 +101,8 @@ const Map = () => {
 
                     return (
                         <Marker key={cluster.properties.locationId || cluster.id} lat={latitude} lng={longitude}
+
+
                         >
                             <button className='pointer' onClick={() => {
 
@@ -110,7 +114,6 @@ const Map = () => {
 
                         </Marker>
                     )
-
                 })}
 
             </GoogleMapReact>
