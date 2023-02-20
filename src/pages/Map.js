@@ -114,6 +114,9 @@ const Map = () => {
                             </button>
                             {showTooltip === cluster.properties.locationId && <div className='tooltip_bg'>
                                 Id: {cluster.properties.locationId}
+                                <div id='triangle'>
+
+                                </div>
                                 <button onClick={() => setShowTooltip(null)} className='btn-close'>x</button>
                             </div>}
 

@@ -22,9 +22,9 @@
 
 .tooltip_bg {
 
-  position: relative;
-  bottom: 60px;
-  right: 7px;
+  position: absolute;
+  bottom: -4px;
+  left: -4px;
   background-color: white;
   border-radius: 2px;
   padding: 3px 0px;
@@ -47,4 +47,12 @@
   opacity: 0.4;
   background-color: lightgray;
   border-radius: 50%;
+}
+
+#triangle {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  border: 10px solid transparent;
+  border-top-color: white;
 }
