@@ -13,6 +13,7 @@ const Map = () => {
     const [bounds, setBounds] = useState(null);
 
 
+
     useEffect(() => {
         fetch('example data-set.json')
             .then(res => res.json())
@@ -20,6 +21,7 @@ const Map = () => {
             .catch(error => console.log(error))
 
     }, [])
+    console.log(locations);
 
     const points = locations.map(location => ({
         type: "Feature",
@@ -110,7 +112,10 @@ const Map = () => {
                             }}>
                                 <img src='/map-pin.png' alt='pointer img' />
                             </button>
-                            {showTooltip === cluster.properties.locationId && <div className='tooltip_bg'>Id: {cluster.properties.locationId}</div>}
+                            {showTooltip === cluster.properties.locationId && <div className='tooltip_bg'>
+                                Id: {cluster.properties.locationId}
+                                <button onClick={() => setShowTooltip(null)} className='btn-close'>x</button>
+                            </div>}
 
                         </Marker>
                     )
